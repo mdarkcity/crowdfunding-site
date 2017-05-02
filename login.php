@@ -1,4 +1,5 @@
 <?php
+session_start();
 $dbhost = "localhost";
 $dbuser = "root";
 $dbpass = "Tanu2603";
@@ -15,7 +16,8 @@ if(mysqli_connect_errno())
 if(isset($_POST["Login"]))
           {
 $query="SELECT * FROM user WHERE uid = '$_POST[userid]' and password = '$_POST[password]'";
-
+$_SESSION['userid']=$_POST['userid'];
+	
 $result = mysqli_query($con,$query);
 if(mysqli_num_rows($result)>0)
 {
