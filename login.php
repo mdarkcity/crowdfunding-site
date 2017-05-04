@@ -1,82 +1,70 @@
 <?php
-session_start();
-$dbhost = "localhost";
-$dbuser = "root";
-$dbpass = "Tanu2603";
-$dbname = "crowdfunding_project";
-$con = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-// Test if connection succeeded
-if(mysqli_connect_errno()) 
-{
-  die("Database connection failed: " . 
-       mysqli_connect_error() . 
-       " (" . mysqli_connect_errno() . ")"
-  );
-}
-if(isset($_POST["Login"]))
-          {
-$query="SELECT * FROM user WHERE uid = '$_POST[userid]' and password = '$_POST[password]'";
-$_SESSION['userid']=$_POST['userid'];
+require_once('connect.php');
+
+if (isset($_POST['login'])) {
+
+    $userid = mysqli_real_escape_string($conn, $_POST['userid']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    $query="SELECT * FROM user WHERE uid='$userid' and password='$password'";
 	
-$result = mysqli_query($con,$query);
-if(mysqli_num_rows($result)>0)
-{
-    header('Location: homepage.php');
-}
-else
-{
-  echo "Username or Password is Incorrect";
-}
-mysqli_close($con);
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) > 0) {
+        header('Location: home.php');
+    } else {
+        $loginerror = "Username or password is incorrect.";
+        mysqli_close($conn);
+    }
+
+    if (isset($loginerror)) {
+        echo "<script type=\"text/javascript\">
+                  window.onload = function() {document.getElementById('error-note').innerHTML = \"<span class='text-danger'>" . $loginerror . "</span>\";}
+              </script>";
+    }
+
+    session_start();
+    $_SESSION['userid']=$userid;
 }
 ?>
 
+<style>
+  body {padding: 40px 20px;}
+</style>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8"/>
-<title>Log In</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log In</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
-
-  <body>
-      <div class="row centered-form">
-        <h3 class="text-center">Welcome User Login</h3>
+<body>
+  <div class="container">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="page-header text-center">
+        <h2>Log in</h2>
       </div>
+      <form action='' method='post'>
 
-      <form id='login' role='form' action='' method='post' >
-        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-          <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="form-group">
+          <label for="userid">User ID</label>
+            <input type="text" name="userid" class="form-control" placeholder="Username" value="<?php if (isset($loginerror)) echo $userid; ?>" required>
+        </div>
 
-              <div class="control-group">
-                <label class="control-label"  for="userid">UserID:</label>
-                  <div class="controls">
-                    <input type="text" name="userid" id="userid" class="form-control input-sm" placeholder="Username" maxlength="50" />
-                  </div>
-              </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
 
-              <div class="control-group">
-                <label class="control-label"  for="password">Password:</label>
-                  <div class="controls">
-                    <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password" maxlength="50" />
-                    <p>               </p>
-                  </div>
-              </div>
+        <button class="btn btn-success btn-block" style="margin-top:30px;" type="submit" name="login">Log In</button>
+      </form>
 
-              <div class="centered">
-                <input type="submit" value="Login" name="Login" id="Login" class="btn btn-success"></input>
-              </div>
-            </div>
-          </div>
-        </form>
-	
+      <p id="note" class="text-center">    
+        Don't have an account? <a href="reg.php">Create one here!</a>
+      </p>
+      <p id="error-note" class="text-center"></p>
+    </div> <!-- middle column -->
+	</div> <!-- container -->
 </body>
 </html>
-      
-	 
-   
-
