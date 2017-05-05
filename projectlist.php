@@ -20,7 +20,6 @@
 		// 1. Create a database connection
 		require_once('connect.php');
 		$tag = $_POST["project_name"];
-		echo $tag;
 		
 	 $query = "select pid,pname,description from project natural join ProjectTag where tag like '%$tag%'";
 	$result = mysqli_query($conn,$query);
