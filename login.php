@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
     $userid = mysqli_real_escape_string($conn, $_POST['userid']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    $query="SELECT * FROM user WHERE uid='$userid' and password='$password'";
+    $query="SELECT * FROM User WHERE uid='$userid' and password='$password'";
 	
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
@@ -16,14 +16,8 @@ if (isset($_POST['login'])) {
         mysqli_close($conn);
     }
 
-    if (isset($loginerror)) {
-        echo "<script type=\"text/javascript\">
-                  window.onload = function() {document.getElementById('error-note').innerHTML = \"<span class='text-danger'>" . $loginerror . "</span>\";}
-              </script>";
-    }
-
     session_start();
-    $_SESSION['userid']=$userid;
+    $_SESSION['userid'] = $userid;
 }
 ?>
 
@@ -46,7 +40,6 @@ if (isset($_POST['login'])) {
         <h2>Log in</h2>
       </div>
       <form action='' method='post'>
-
         <div class="form-group">
           <label for="userid">User ID</label>
             <input type="text" name="userid" class="form-control" placeholder="Username" value="<?php if (isset($loginerror)) echo $userid; ?>" required>
@@ -63,8 +56,8 @@ if (isset($_POST['login'])) {
       <p id="note" class="text-center">    
         Don't have an account? <a href="reg.php">Create one here!</a>
       </p>
-      <p id="error-note" class="text-center"></p>
+      <p class="text-danger text-center"><?php if (isset($loginerror)) echo $loginerror; ?></p>
     </div> <!-- middle column -->
-	</div> <!-- container -->
+  </div> <!-- container -->
 </body>
 </html>

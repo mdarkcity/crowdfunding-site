@@ -13,17 +13,31 @@ if (isset($_POST['signup'])) {
     $cpassword = trim(mysqli_real_escape_string($conn, $_POST['cpassword']));
     
     //name can contain only alpha characters and space
-    if (!preg_match("/^[a-zA-Z ]{2,40}$/", $name)) {
+    if (strlen($name) < 2 | strlen($name) > 40) {
         $error = true;
-        $name_error = "Name may contain only alpha characters and spaces,\n
-                       and must be between 2 and 40 characters.";
+        $name_error = "Name must be between 2 and 40 characters.";
     }
-    if (preg_match("/[^a-z0-9_\-!?#$]/i", $userid, $invalid)) {
-        $error = true;
-        $userid_error = "Login ID may not contain: $invalid[0]";
-    } elseif (strlen($userid) < 5 | strlen($userid) > 40) {
+    if (!preg_match("/^[a-zA-Z ]+$/", $name)) {
+        $name_error2 = "Name may contain only alpha characters and spaces.";
+        if (isset($name_error)) {
+            $name_error .= "<br>" . $name_error2;
+        } else {
+            $error = true;
+            $name_error = $name_error2;
+        }
+    }
+    if (strlen($userid) < 5 | strlen($userid) > 40) {
         $error = true;
         $userid_error = "Login ID must be between 5 and 40 characters.";
+    }
+    if (preg_match("/[^a-z0-9_\-!?#$]/i", $userid, $invalid)) {
+        $userid_error2 = "Login ID may not contain: $invalid[0]";
+        if (isset($userid_error)) {
+            $userid_error .= "<br>" . $userid_error2;
+        } else {
+            $error = true;
+            $userid_error = $userid_error2;
+        }
     }
     if (strlen($password) < 6 | strlen($password) > 40) {
         $error = true;
@@ -38,7 +52,7 @@ if (isset($_POST['signup'])) {
         $row_count = mysqli_num_rows($sql);
         if ($row_count == 1) {
             $error = true;
-            $userid_error1 = "Username already exists.";
+            $userid_error = "Username already exists.";
         }
     }
 	
@@ -71,30 +85,28 @@ if (isset($_POST['signup'])) {
         <h2>Create an account</h2>
       </div>
       <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" name="name" class="form-control" placeholder="Full Name" value="<?php if ($error) echo $name; ?>" required>
-          <span class="text-danger"><?php if (isset($name_error)) echo $name_error; ?></span>
+          <p class="text-danger text-right"><?php if (isset($name_error)) echo $name_error; ?></p>
         </div>
 
         <div class="form-group">
           <label for="userid">Login ID</label>
           <input type="text" name="userid" class="form-control" placeholder="Username" value="<?php if ($error) echo $userid; ?>" required>
-          <span class="text-danger"><?php if (isset($userid_error)) echo $userid_error; ?></span>
-          <span class="text-danger"><?php if (isset($userid_error1)) echo $userid_error1; ?></span>
+          <p class="text-danger text-right"><?php if (isset($userid_error)) echo $userid_error; ?></p>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" name="password" class="form-control" placeholder="Password" required>
-          <span class="text-danger"><?php if (isset($password_error)) echo $password_error; ?></span>
+          <p class="text-danger text-right"><?php if (isset($password_error)) echo $password_error; ?></p>
         </div>
 
         <div class="form-group">
           <label for="cpassword">Confirm Password</label>
           <input type="password" name="cpassword" class="form-control" placeholder="Confirm Password" required>
-          <span class="text-danger"><?php if (isset($cpassword_error)) echo $cpassword_error; ?></span>
+          <p class="text-danger text-right"><?php if (isset($cpassword_error)) echo $cpassword_error; ?></p>
         </div>
 
         <button class="btn btn-primary btn-block" style="margin-top:30px;" type="submit" name="signup">Sign Up</button>
