@@ -19,14 +19,14 @@ $activity = [];
 $get_friends = "SELECT uid FROM Follow WHERE followerid='$userid'";
 $friends = mysqli_query($conn, $get_friends);
 if (!$friends) err_close();
-while($friend = mysqli_fetch_assoc($friends)) {
+while ($friend = mysqli_fetch_assoc($friends)) {
     $friend = $friend['uid'];
 
     // get all friends' comments
     $get_comments = "SELECT C.uid, C.text, P.pname, C.commenttime FROM Comment C JOIN Project P USING(pid) WHERE C.uid='$friend'";
     $comments = mysqli_query($conn, $get_comments);
     if (!$comments) err_close();
-    while($comment = mysqli_fetch_assoc($comments)) {
+    while ($comment = mysqli_fetch_assoc($comments)) {
         if (array_key_exists($comment['commenttime'], $activity)) {
             $activity[$comment['commenttime']][] = ["c", $comment];
         } else {
@@ -38,7 +38,7 @@ while($friend = mysqli_fetch_assoc($friends)) {
     $get_likes = "SELECT L.uid, P.pname, L.liketime FROM `Like` L JOIN Project P USING(pid) WHERE L.uid='$friend'";
     $likes = mysqli_query($conn, $get_likes);
     if (!$likes) err_close();
-    while($like = mysqli_fetch_assoc($likes)) {
+    while ($like = mysqli_fetch_assoc($likes)) {
         if (array_key_exists($like['liketime'], $activity)) {
             $activity[$like['liketime']][] = ["l", $like];
         } else {
@@ -50,14 +50,33 @@ while($friend = mysqli_fetch_assoc($friends)) {
     $get_pledges = "SELECT Pl.uid, P.pname, Pl.amount, Pl.pledgetime FROM Pledge Pl JOIN Project P USING(pid) WHERE Pl.uid='$friend'";
     $pledges = mysqli_query($conn, $get_pledges);
     if (!$pledges) err_close();
-    while($pledge = mysqli_fetch_assoc($pledges)) {
+    while ($pledge = mysqli_fetch_assoc($pledges)) {
         if (array_key_exists($pledge['pledgetime'], $activity)) {
             $activity[$pledge['pledgetime']][] = ["p", $pledge];
         } else {
             $activity[$pledge['pledgetime']] = [["p", $pledge]];
         }
     }
+}
 
+// get all projects user likes / has funded
+$get_projects = "SELECT pid FROM `Like` WHERE uid='$userid' UNION SELECT pid FROM Pledge WHERE uid='$userid'";
+$projects = mysqli_query($conn, $get_projects);
+if (!$projects) err_close();
+while ($project = mysqli_fetch_assoc($projects)) {
+    $project = $project['pid'];
+
+    // get all posts from project
+    $get_posts = "SELECT P.pname, M.text, M.attachment, M.addtime FROM Project P JOIN Material M USING(pid) WHERE P.pid='$project'";
+    $posts = mysqli_query($conn, $get_posts);
+    if (!$posts) err_close();
+    while ($post = mysqli_fetch_assoc($posts)) {
+        if (array_key_exists($post['addtime'], $activity)) {
+            $activity[$post['addtime']][] = ["m", $post];
+        } else {
+            $activity[$post['addtime']] = [["m", $post]];
+        }
+    }
 }
 
 // sort events in reverse chronological order
@@ -89,6 +108,9 @@ function err_close() {
   li.pledge:before {
     content: "\e225";
   }
+  li.material:before {
+    content: "\e146";
+  }
 </style>
 
 
@@ -111,8 +133,9 @@ function err_close() {
         <?php
             foreach ($activity as $events) {
                 foreach ($events as $e) {
-                    if ($e[0] == "c") {
-                        $e = $e[1];
+                    $e_type = $e[0];
+                    $e = $e[1];
+                    if ($e_type == "c") {
                         echo
                         "<li class='comment'>
                           <div class=\"row\">
@@ -122,8 +145,7 @@ function err_close() {
                             </div>
                           </div>
                         </li>";
-                    } elseif ($e[0] == "l") {
-                        $e = $e[1];
+                    } elseif ($e_type == "l") {
                         echo
                         "<li class='like'>
                           <div class=\"row\">
@@ -132,13 +154,22 @@ function err_close() {
                             </div>
                           </div>
                         </li>";
-                    }  elseif ($e[0] == "p") {
-                        $e = $e[1];
+                    } elseif ($e_type == "p") {
                         echo
                         "<li class='pledge'>
                           <div class=\"row\">
                             <div class='well well-sm pull-left'>
                               ".$e['uid']." pledged $".$e['amount']." to ".$e['pname']."
+                            </div>
+                          </div>
+                        </li>";
+                    } elseif ($e_type == "m") {
+                        echo
+                        "<li class='material'>
+                          <div class=\"row\">
+                            <div class='well well-sm pull-left'>
+                              ".$e['pname']." posted an update:<br>".$e['text']."<br>";
+                        echo "<img src=\"data:image/jpeg;base64,".base64_encode($e['attachment'])."\"/>               
                             </div>
                           </div>
                         </li>";

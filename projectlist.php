@@ -22,7 +22,7 @@
 		
 	 $query = "select pid,pname,description from project natural join ProjectTag where tag like '%$tag%'";
 	$result = mysqli_query($conn,$query);
-    while($row = mysqli_fetch_assoc($result))
+    while ($row = mysqli_fetch_assoc($result))
 		  {
 			  
 			?>   

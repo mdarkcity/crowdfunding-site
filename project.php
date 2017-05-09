@@ -31,7 +31,7 @@
 		
 	 $query = "select * from project where pid = '$proj_id'";
 	$result = mysqli_query($conn,$query);
-       while($row = mysqli_fetch_assoc($result))
+       while ($row = mysqli_fetch_assoc($result))
 		  {
 			  
 			?>   
