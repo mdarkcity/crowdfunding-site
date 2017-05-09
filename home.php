@@ -185,7 +185,12 @@ function err_close() {
       <input type="text" name="project_name" placeholder="search project here">
       <input type="submit" name="search" value="Search">
     </form>
-
+<div class="row">
+        <div class="col-md-4 col-md-offset-4 text-center">    
+        <h4> <a href='projectcreate.php'>Click here to create New Project.</a></h4>
+        <h4> <a href='owner_project.php'>Update the existing Project.</a></h4>
+        </div>
+</div>
   </div>
 </body>
 </html>

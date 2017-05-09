@@ -1,7 +1,8 @@
-<?php session_start(); ?>
+<?php SESSION_start(); ?>
 <!doctype html>
+    <html lang="en">
     <head>
-      <meta charset="utf-8">
+      <meta charset="UTF-8">
       <title>List of Products</title>
     </head>
     <body>

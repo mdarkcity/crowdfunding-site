@@ -3,10 +3,10 @@
     <html lang="en">
     <head>
       <meta charset="UTF-8">
-      <title>List of Products</title>
+      <title>Project Page</title>
     </head>
     <body>
-		<form action = "project.php" method ="POST" >
+		<form action = "project_pledge.php" method ="POST" >
 		<table border="1">
 		      <thead>
 		        <tr>
@@ -24,10 +24,12 @@
 		        </tr>
 		      </thead>
 		 <?php
+		 $error = false;
 		// 1. Create a database connection
 		require_once('connect.php');
+		$proj_id = $_POST['pid'];
+		$_SESSION['pid']=$proj_id;
 		
-		$proj_id = $_POST["pid"];
 		
 	 $query = "select * from project where pid = '$proj_id'";
 	$result = mysqli_query($conn,$query);
@@ -56,9 +58,12 @@
 				 </table>
 		
 	    	<br><br>
-	    	<input type="submit" value="submit" style = " margin-left: 50%" >
+	    <input type="submit" value="pledge">
 	    </form>		
-    <?php mysqli_close($conn); ?>
+
+<?php
+mysqli_close($conn); 
+?>
  	
     </body>
     </html>
