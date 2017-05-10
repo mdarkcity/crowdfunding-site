@@ -6,7 +6,7 @@
       <title>Project Page</title>
     </head>
     <body>
-		<form action = "project_pledge.php" method ="POST" >
+		
 		<table border="1">
 		      <thead>
 		        <tr>
@@ -57,10 +57,48 @@
 		         ?>
 				 </table>
 		
-	    	<br><br>
-	    <input type="submit" value="pledge">
-	    </form>		
-
+			<form action = "project_pledge.php" method ="POST" >
+		    <input type="submit" value="pledge"><br/>
+		    </form>
+		
+	    	<br>
+			<?php
+			
+			$sql = "SELECT attachment,type FROM material where pid = '" . $_SESSION['pid'] . "'";
+			$result = mysqli_query($conn,$sql);
+            
+            if (mysqli_num_rows($result) > 0)
+			 {
+                while ($row = mysqli_fetch_assoc($result))
+				 {
+                    $attach = $row["attachment"];
+					$type = $row["type"];
+					if($type == "image")
+					{
+					echo "<div class=\"row\"><div class=\"card\">";
+                    echo "<img src=uploads/$attach alt=\"Card image cap\" style=\"height: 150px; width: 50%; display: block;\">";
+                      echo "</img>";
+					  echo "</div>";
+				  }
+				  elseif ($type == "video")
+				  {
+					  echo "<div class=\"row\"><div class=\"card\">";
+                      echo "<video src=uploads/$attach style=\"height: 150px; width: 50%;>";
+                        echo "</video>";
+						echo "</div>";
+						
+				  }
+                    
+                }
+            }
+			
+			?>
+			<br/>
+			<form action = "project_pledge.php" method ="POST" >
+		    <input type="submit" value="pledge"><br/>
+		    </form>
+		
+		
 <?php
 mysqli_close($conn); 
 ?>
