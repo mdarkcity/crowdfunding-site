@@ -23,11 +23,11 @@ if (isset($_POST['signup'])) {
     }
     if (preg_match("/[^a-z0-9_\-!?#$]/i", $pid, $invalid)) {
         $error = true;
-        $pid_error = "Login ID may not contain: $invalid[0]";
+        $pid_error = "Project ID may not contain: $invalid[0]";
     } 
     
 	
-    if ($sql=mysqli_query($conn, "SELECT pname FROM project WHERE LOWER(pid)=LOWER('$pid')")) {
+    if ($sql=mysqli_query($conn, "SELECT pname FROM Project WHERE LOWER(pid)=LOWER('$pid')")) {
         $row_count = mysqli_num_rows($sql);
         if ($row_count == 1) {
             $error = true;
@@ -35,12 +35,16 @@ if (isset($_POST['signup'])) {
         }
     }
 	
-    if (!$error) {
-        if (mysqli_query($conn, "INSERT INTO project(pid,uid,description,pname,minfunds,maxfunds,enddate,completiondate) VALUES('" . $pid ."', '" . $_SESSION['userid'] . "', '" . $desc . "','". $pname ."','" . $minfunds . "','" . $maxfunds . "','" . $enddate . "','" . $completiondate . "')")) {
+    if (!$error) 
+	{
+        if (mysqli_query($conn,"INSERT INTO Project(pid,uid,description,pname,minfunds,maxfunds,enddate,completiondate) VALUES('" . $pid ."', '" . $_SESSION['userid'] . "', '" . $desc . "','". $pname ."','" . $minfunds . "','" . $maxfunds . "','" . $enddate . "','" . $completiondate . "')")) 
+		{
 			mysqli_query($conn,"INSERT INTO ProjectTag(pid,tag) VALUES('" . $pid . "','" . $tag . "')");
-            $successmsg = "Successfully created";
-        } else {
-            $errormsg = "Error in creating... Please try again later!";
+            echo "Successfully created";
+        } 
+		else 
+		{
+            echo "Error in creating... Please try again later!";
         }
     }
 }
@@ -114,18 +118,6 @@ if (isset($_POST['signup'])) {
 		<h4> <a href='home.php'>Return to home page.</a></h4>
       </form>
 	  
-
-      <?php if (isset($successmsg)) {
-          echo "<script type=\"text/javascript\">
-                  window.onload = function() {document.getElementById('note').innerHTML = \"<span class='text-success'>" . $successmsg . "</span>\";}
-                </script>";
-      } ?>
-
-      <?php if (isset($errormsg)) {
-          echo "<script type=\"text/javascript\">
-                  window.onload = function() {document.getElementById('note').innerHTML = \"<span class='text-danger'>" . $errormsg . "</span>\";}
-                </script>";
-      } ?>
     </div> <!-- middle column -->
   </div> <!-- container -->
 </body>
