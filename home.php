@@ -89,7 +89,6 @@ function err_close() {
 ?>
 
 <style>
-  body {padding: 20px 20px;}
   ul {list-style: none;}
   li:before {
     font-family: "Glyphicons Halflings";
@@ -113,7 +112,6 @@ function err_close() {
   }
 </style>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -123,6 +121,7 @@ function err_close() {
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
+  <?php include_once('navbar.php') ?>
   <div class="container">
     <div class="col-md-8">
       <div class="page-header">
@@ -180,17 +179,11 @@ function err_close() {
 
       </ul>
     </div>
-
-    <form action="projectlist.php" method="POST">
-      <input type="text" name="project_name" placeholder="search project here">
-      <input type="submit" name="search" value="Search">
-    </form>
-<div class="row">
-        <div class="col-md-4 col-md-offset-4 text-center">    
-        <h4> <a href='projectcreate.php'>Click here to create New Project.</a></h4>
-        <h4> <a href='owner_project.php'>Update the existing Project.</a></h4>
-        </div>
-</div>
-  </div>
+    <div class="col-md-3 col-md-offset-1" style="padding-top:40px;">
+      <div class="row">
+        <a href="projectcreate.php" class="btn btn-primary btn-lg btn-block" type="button"><span class="glyphicon glyphicon-flag"></span>&ensp;Create a project!</a>
+      </div>
+    </div>
+  </div> <!-- container -->
 </body>
 </html>

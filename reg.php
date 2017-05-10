@@ -12,7 +12,6 @@ if (isset($_POST['signup'])) {
     $password = trim(mysqli_real_escape_string($conn, $_POST['password']));
     $cpassword = trim(mysqli_real_escape_string($conn, $_POST['cpassword']));
     
-    //name can contain only alpha characters and space
     if (strlen($name) < 2 | strlen($name) > 40) {
         $error = true;
         $name_error = "Name must be between 2 and 40 characters.";
@@ -84,7 +83,7 @@ if (isset($_POST['signup'])) {
       <div class="page-header text-center">
         <h2>Create an account</h2>
       </div>
-      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" name="name" class="form-control" placeholder="Full Name" value="<?php if ($error) echo $name; ?>" required>

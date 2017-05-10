@@ -1,6 +1,11 @@
 <?php
 require_once('connect.php');
 
+session_start();
+if (isset($_SESSION['userid'])) {
+    header('Location: home.php');
+}
+
 if (isset($_POST['login'])) {
 
     $userid = mysqli_real_escape_string($conn, $_POST['userid']);
@@ -16,7 +21,6 @@ if (isset($_POST['login'])) {
         mysqli_close($conn);
     }
 
-    session_start();
     $_SESSION['userid'] = $userid;
 }
 ?>
@@ -39,7 +43,7 @@ if (isset($_POST['login'])) {
       <div class="page-header text-center">
         <h2>Log in</h2>
       </div>
-      <form action='' method='post'>
+      <form method="POST">
         <div class="form-group">
           <label for="userid">User ID</label>
             <input type="text" name="userid" class="form-control" placeholder="Username" value="<?php if (isset($loginerror)) echo $userid; ?>" required>
