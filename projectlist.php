@@ -6,7 +6,7 @@
       <title>List of Products</title>
     </head>
     <body>
-		<form action="project.php" method ="POST">
+		<form action = "project.php" method ="POST" >
 		<table border="1">
 		      <thead>
 		        <tr>
@@ -15,14 +15,15 @@
 		          <th>Project Description</th>
 		        </tr>
 		      </thead>
+			  conn
 		 <?php
 		// 1. Create a database connection
 		require_once('connect.php');
 		$tag = $_POST["project_name"];
 		
-	 $query = "select pid,pname,description from project natural join ProjectTag where tag like '%$tag%'";
+	 $query = "select DISTINCT pid,pname,description from project natural join ProjectTag where tag like '%$tag%' or pname like '%$tag%' or pid like '%$tag%'";
 	$result = mysqli_query($conn,$query);
-    while ($row = mysqli_fetch_assoc($result))
+    while($row = mysqli_fetch_assoc($result))
 		  {
 			  
 			?>   
