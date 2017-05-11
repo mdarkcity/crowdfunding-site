@@ -33,7 +33,7 @@
 		
 	 $query = "select * from project where pid = '$proj_id'";
 	$result = mysqli_query($conn,$query);
-       while ($row = mysqli_fetch_assoc($result))
+       while($row = mysqli_fetch_assoc($result))
 		  {
 			  
 			?>   
@@ -56,12 +56,23 @@
 		  
 		         ?>
 				 </table>
-		
+		<?php
+		$result = mysqli_query($conn, "select status from project where pid = '$proj_id'");
+		while($row = mysqli_fetch_assoc($result)){
+			$status = $row["status"];
+		if($status == 'fundraising')
+		{
+		?>
 			<form action = "project_pledge.php" method ="POST" >
 		    <input type="submit" value="pledge"><br/>
 		    </form>
+			<?php
+		}
+	}
+			?>	
 		
 	    	<br>
+			<ul>
 			<?php
 			
 			$sql = "SELECT attachment,type FROM material where pid = '" . $_SESSION['pid'] . "'";
@@ -75,17 +86,23 @@
 					$type = $row["type"];
 					if($type == "image")
 					{
+						echo "<li>";
 					echo "<div class=\"row\"><div class=\"card\">";
                     echo "<img src=uploads/$attach alt=\"Card image cap\" style=\"height: 150px; width: 50%; display: block;\">";
                       echo "</img>";
 					  echo "</div>";
+					  echo "</div>";
+					  echo "</li>";
 				  }
 				  elseif ($type == "video")
 				  {
+					  echo "<li>";
 					  echo "<div class=\"row\"><div class=\"card\">";
-                      echo "<video src=uploads/$attach style=\"height: 150px; width: 50%;>";
+                      echo "<video src=uploads/$attach style=\"height: 150px; width: 50%;\">";
                         echo "</video>";
 						echo "</div>";
+						echo "</div>";
+						echo "</li>";
 						
 				  }
                     
@@ -93,11 +110,8 @@
             }
 			
 			?>
-			<br/>
-			<form action = "project_pledge.php" method ="POST" >
-		    <input type="submit" value="pledge"><br/>
-		    </form>
-		
+			
+	</ul>	
 		
 <?php
 mysqli_close($conn); 
