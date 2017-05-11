@@ -1,6 +1,11 @@
 <?php
 require_once('connect.php');
 
+session_start();
+if (isset($_SESSION['userid'])) {
+    header('Location: home.php');
+}
+
 //set validation error flag as false
 $error = false;
 
@@ -83,7 +88,7 @@ if (isset($_POST['signup'])) {
       <div class="page-header text-center">
         <h2>Create an account</h2>
       </div>
-      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+      <form method="POST">
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" name="name" class="form-control" placeholder="Full Name" value="<?php if ($error) echo $name; ?>" required>

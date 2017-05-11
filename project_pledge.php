@@ -9,7 +9,7 @@ $row = mysqli_num_rows($result);
 
 if (isset($_POST['submit']))
 {
-$amount = trim(mysqli_real_escape_string($conn, $_POST['amount']));
+$amount = floatval(trim(mysqli_real_escape_string($conn, $_POST['amount'])));
 
     if ($amount < 0)
 	 {
@@ -93,7 +93,7 @@ elseif ($row >= 1 && $bool ==2)
 	
 </div>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-<input type="text" name="amount" placeholder="enter ramount" value="<?php if ($error) echo $amount; ?>" required>
+<input type="text" name="amount" placeholder="enter amount" value="<?php if ($error) echo $amount; ?>" required>
 			<span class="text-danger"><?php if (isset($amount_error)) echo $amount_error; ?></span>
 	    <button class="btn btn-primary btn-block" style="margin-top:30px;" type="submit" name="submit">Pledge</button>
 </form>	

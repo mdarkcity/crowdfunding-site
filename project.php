@@ -15,7 +15,7 @@ $get_tags = "SELECT tag FROM ProjectTag WHERE pid='$pid'";
 $tags = mysqli_query($conn, $get_tags);
 if (!$get_tags) err_close();
 
-$get_material = "SELECT text, attachment, type FROM Material WHERE pid='$pid'";
+$get_material = "SELECT text, attachment, type FROM Material WHERE pid='$pid' ORDER BY addtime DESC";
 $material = mysqli_query($conn, $get_material);
 if (!$material) err_close();
 
@@ -88,7 +88,9 @@ if (isset($_POST['like'])) {
                   if ($row['type'] == "image") {
                       echo "<img src=uploads/$attach>";
                   } elseif ($row['type'] == "video") {
-                      echo "<video src=uploads/$attach>";
+                      echo "<video controls>
+                              <source src=uploads/$attach>
+                            </video>";
                   }
                   echo "</div></div>";
               }
@@ -119,7 +121,7 @@ if (isset($_POST['like'])) {
         </div>
         <ul class="list-group">
           <li class="list-group-item">
-            Creator: <a href=""><?php echo $p_info['uid'] ?></a>
+            Creator: <a href="user.php?uid=${p_info['uid']}"><?php echo $p_info['uid'] ?></a>
           </li>
           <li class="list-group-item">
             <?php $posttime = date_create($p_info['posttime']) ?>
