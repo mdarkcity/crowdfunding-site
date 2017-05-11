@@ -23,6 +23,10 @@ $get_like = "SELECT * FROM `Like` WHERE uid='$uid' AND pid='$pid'";
 $like = mysqli_query($conn, $get_like);
 if (!$like) err_close();
 
+$get_comments = "SELECT * FROM Comment WHERE pid='$pid'";
+$comments = mysqli_query($conn, $get_comments);
+if (!$comments) err_close();
+
 if (isset($_POST['like'])) {
     unset($_POST['unlike']);
     $like_ins = "INSERT INTO `Like`(uid, pid) VALUES('$uid', '$pid')";
@@ -32,6 +36,12 @@ if (isset($_POST['like'])) {
     unset($_POST['like']);
     $unlike = "DELETE FROM `LIKE` WHERE uid='$uid' AND pid='$pid'";
     mysqli_query($conn, $unlike);
+    header('Refresh:0');
+}
+
+if (isset($_POST['post'])) {
+    $comm_ins = "INSERT INTO Comment(uid, pid, text) VALUES('$uid', '$pid','".$_POST['comment']."')";
+    mysqli_query($conn, $comm_ins);
     header('Refresh:0');
 }
 
@@ -97,6 +107,26 @@ if (isset($_POST['like'])) {
           }
 			?>
 
+      <?php
+          if (mysqli_num_rows($comments) > 0) {
+              echo "<div class='page-header'><h3>Comments</h3></div>";
+              while ($row = mysqli_fetch_assoc($comments)) {
+                echo "<div class='panel panel-default'>
+                        <div class='panel-heading'>
+                          ${row['uid']}
+                        </div>
+                        <div class='panel-body'>";
+                echo $row['text'];
+                echo "</div></div>";
+              }
+          }
+      ?>
+
+      <form method="POST">
+        <input type="text" name="comment" class="form-control" placeholder="Write a comment..." required>
+        <button class="btn btn-primary" type="submit" name="post">Post comment</button>
+      </form>
+
     </div> <!-- main column (8) -->
 
     <div class="col-md-4" style="padding-top:13px;">
@@ -121,7 +151,7 @@ if (isset($_POST['like'])) {
         </div>
         <ul class="list-group">
           <li class="list-group-item">
-            Creator: <a href="user.php?uid=${p_info['uid']}"><?php echo $p_info['uid'] ?></a>
+            Creator: <a href="user.php?uid=<?php echo $p_info['uid'] ?>"><?php echo $p_info['uid'] ?></a>
           </li>
           <li class="list-group-item">
             <?php $posttime = date_create($p_info['posttime']) ?>

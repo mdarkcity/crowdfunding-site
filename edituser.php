@@ -9,6 +9,18 @@ $u_info = mysqli_query($conn, $get_info);
 if (!$u_info) err_close();
 $u_info = mysqli_fetch_array($u_info);
 
+if (isset($_POST['save'])) {
+
+    $name = trim(mysqli_real_escape_string($conn, $_POST['name']));
+    $city = trim(mysqli_real_escape_string($conn, $_POST['city']));
+    $bio = trim(mysqli_real_escape_string($conn, $_POST['bio']));
+
+    $pw = trim(mysqli_real_escape_string($conn, $_POST['pw']));
+    $cc = trim(mysqli_real_escape_string($conn, $_POST['cc']));
+
+    mysqli_query($conn, "UPDATE User SET uname='$name', city='$city', bio='$bio', password='$pw', ccno='$cc' WHERE uid='$uid'");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,12 +40,6 @@ $u_info = mysqli_fetch_array($u_info);
       </div>
       <h4 class="text-center"><span class="label label-info">Public</span></h4>
       <form class="form-horizontal" method="POST">
-        <div class="form-group">
-          <label class="control-label col-md-4">User ID:</label>
-          <div class="col-md-8">
-            <input type="text" name="uid" class="form-control col-md-8" value="<?php echo $u_info['uid'] ?>">
-          </div>
-        </div>
         <div class="form-group">
           <label class="control-label col-md-4">Full name:</label>
           <div class="col-md-8">
@@ -55,13 +61,13 @@ $u_info = mysqli_fetch_array($u_info);
         <br>
         <h4 class="text-center"><span class="label label-warning">Private</span></h4>
         <div class="form-group">
-          <label class="control-label col-md-4">CC</label>
+          <label class="control-label col-md-4">Credit card:</label>
           <div class="col-md-8">
             <input type="text" name="cc" class="form-control col-md-8" value="<?php echo $u_info['ccno'] ?>">
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label col-md-4">PW</label>
+          <label class="control-label col-md-4">Password:</label>
           <div class="col-md-8">
             <input type="text" name="pw" class="form-control col-md-8" value="<?php echo $u_info['password'] ?>">
           </div>

@@ -188,6 +188,9 @@ krsort($activity);
       <div class="row">
         <a href="projectcreate.php" class="btn btn-primary btn-lg btn-block" type="button"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;Create a project!</a>
       </div>
+      <div class="row">
+        <a href="owner_project.php" class="btn btn-default btn-lg btn-block" type="button">Manage your projects here.</a>
+      </div>
     </div>
   </div> <!-- container -->
 </body>
