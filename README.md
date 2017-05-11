@@ -12,16 +12,18 @@ CREATE TABLE `Material` (
   FOREIGN KEY (`pid`) REFERENCES `Project` (`pid`)
 );
 
+
+SET SQL_SAFE_UPDATES = 0;
+SET global event_scheduler = ON;
+
 DROP EVENT IF EXISTS `fundraising_campaign_check1` ;
 CREATE 
 EVENT `fundraising_campaign_check1` 
 ON schedule every 1 second
 DO 
 update project 
-join pledge on 
-project.pid=pledge.pid
-set project.status='working' , pledge.charged='TRUE'
-where project.currentfunds >= maxfunds and  enddate >= current_date() ;
+set project.status='working'
+where project.currentfunds >= maxfunds ;
 
 DROP EVENT IF EXISTS `fundraising_campaign_check2` ;
 CREATE 
@@ -32,6 +34,16 @@ update project
 set project.status='unsuccessful' 
 where project.currentfunds < minfunds and enddate < current_date();
 
+DROP EVENT IF EXISTS `fundraising_campaign_check4` ;
+CREATE 
+EVENT `fundraising_campaign_check4` 
+ON schedule every 1 second
+DO 
+update project 
+set project.status='working' 
+where project.currentfunds >= minfunds and enddate < current_date();
+
+DROP EVENT IF EXISTS `fundraising_campaign_check3`;
 CREATE 
 EVENT `fundraising_campaign_check3` 
 ON schedule every 1 second
@@ -39,6 +51,15 @@ DO
 update project 
 set project.status='late'
 where completeddate > completiontime;
+
+CREATE 
+TRIGGER `funding_campaign`
+AFTER UPDATE
+ON  `project` FOR EACH ROW
+UPDATE `pledge`
+SET charged ='TRUE'
+where project.status = 'working';
+
 
 
 #### trigger to update currentfunds in project table ###
