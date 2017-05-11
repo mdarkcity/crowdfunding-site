@@ -79,7 +79,7 @@ if (isset($_POST['follow'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>User's Home Page</title>
+  <title>User's Page</title>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
@@ -87,7 +87,7 @@ if (isset($_POST['follow'])) {
   <div class="container">
     <div class="col-md-8">
       <div class="page-header">
-        <h2>Recent Activity</h2>
+        <h2><?php echo $friend ?>'s recent activity</h2>
       </div>
       <ul>
 
