@@ -7,7 +7,7 @@ if (isset($_POST["keyword"])) {
     $get_projects = "SELECT DISTINCT pid, pname, description, status FROM Project NATURAL JOIN ProjectTag WHERE tag LIKE '%$key%' OR pname LIKE '%$key%' OR description LIKE '%$key%' ORDER BY posttime DESC";
 } elseif (isset($_GET["tag"])) {
     $tag = $_GET["tag"];
-    $get_projects = "SELECT DISTINCT pid, pname, description, status FROM Project NATURAL JOIN ProjectTag WHERE tag='$tag' ORDER BY posttime DESC";
+    $get_projects = "SELECT DISTINCT pid, pname, description, status, posttime FROM Project NATURAL JOIN ProjectTag WHERE tag='$tag' ORDER BY posttime DESC";
 }
 
 $projects = mysqli_query($conn, $get_projects);
