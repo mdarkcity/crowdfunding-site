@@ -56,7 +56,7 @@ INSERT INTO `ProjectTag` VALUES (7, 'wholesome');
 INSERT INTO `ProjectTag` VALUES (7, 'all-nighter');
 
 -- material
-INSERT INTO `Material` VALUES (2, 'Jesse\'s old thang looked a bit like this:', LOAD_FILE('/Users/mdarkcity/college/nyu cs/databases/proj/4track.jpg'), '2012-04-21 12:04:20');
+INSERT INTO `Material` VALUES (2, 'Jesse\'s old thang looked a bit like this:', '4track.jpg', 'image', '2012-04-21 12:04:20');
 
 -- likes
 INSERT INTO `Like` VALUES ('lrkrmass', 1, '2011-02-20 21:21:39');

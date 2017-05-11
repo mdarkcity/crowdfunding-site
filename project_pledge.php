@@ -7,7 +7,7 @@ $bool =0;
 $result = mysqli_query($conn," SELECT uid,pid,amount from pledge where uid = '" . $_SESSION['userid'] ."' and pid = '" . $_SESSION['pid'] . "'");
 $row = mysqli_num_rows($result);
 
-if(isset($_POST['submit']))
+if (isset($_POST['submit']))
 {
 $amount = trim(mysqli_real_escape_string($conn, $_POST['amount']));
 
@@ -26,16 +26,16 @@ $amount = trim(mysqli_real_escape_string($conn, $_POST['amount']));
 	{
 		$mf = $array["maxfunds"];
 		$cf = $array["currentfunds"];
-		if($row ==0)
+		if ($row ==0)
 		{
-		if($amount <= ($mf-$cf))
+		if ($amount <= ($mf-$cf))
 		{
 			$bool = 1;
 		}
 	}
 		elseif ($row ==1)
 		{
-		if(abs($amount-$old_amount)<= ($mf-$cf))
+		if (abs($amount-$old_amount)<= ($mf-$cf))
 		{
 			$bool = 2;
 			
@@ -43,12 +43,12 @@ $amount = trim(mysqli_real_escape_string($conn, $_POST['amount']));
 	    }
 	}	
 	
-if(!$error)
+if (!$error)
 {
 if ($row == 0 && $bool == 1)
 {
 	
-if(mysqli_query($conn, "INSERT INTO pledge(uid,pid,amount) VALUES('" . $_SESSION['userid'] . "','" . $_SESSION['pid'] . "','" . $amount . "')"))
+if (mysqli_query($conn, "INSERT INTO pledge(uid,pid,amount) VALUES('" . $_SESSION['userid'] . "','" . $_SESSION['pid'] . "','" . $amount . "')"))
 		{
 			echo "successfully pledged";
 		}
@@ -62,7 +62,7 @@ if(mysqli_query($conn, "INSERT INTO pledge(uid,pid,amount) VALUES('" . $_SESSION
 elseif ($row >= 1 && $bool ==2)
 {
 		
-		 if(mysqli_query($conn, "UPDATE pledge SET amount = '" . $amount . "' where uid = '" . $_SESSION['userid'] ."' and pid = '" . $_SESSION['pid'] . "'"))
+		 if (mysqli_query($conn, "UPDATE pledge SET amount = '" . $amount . "' where uid = '" . $_SESSION['userid'] ."' and pid = '" . $_SESSION['pid'] . "'"))
 		 {
 			 echo " amount updated successfully";
 		 }

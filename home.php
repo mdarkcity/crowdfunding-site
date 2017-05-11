@@ -27,7 +27,7 @@ while ($friend = mysqli_fetch_assoc($friends)) {
     $friend = $friend['uid'];
 
     // get all friends' comments
-    $get_comments = "SELECT C.uid, C.text, P.pname, C.commenttime FROM Comment C JOIN Project P USING(pid) WHERE C.uid='$friend'";
+    $get_comments = "SELECT C.uid, C.text, P.pid, P.pname, C.commenttime FROM Comment C JOIN Project P USING(pid) WHERE C.uid='$friend'";
     $comments = mysqli_query($conn, $get_comments);
     if (!$comments) err_close();
     while ($comment = mysqli_fetch_assoc($comments)) {
@@ -39,7 +39,7 @@ while ($friend = mysqli_fetch_assoc($friends)) {
     }
 
     // get all friends' likes
-    $get_likes = "SELECT L.uid, P.pname, L.liketime FROM `Like` L JOIN Project P USING(pid) WHERE L.uid='$friend'";
+    $get_likes = "SELECT L.uid, P.pid, P.pname, L.liketime FROM `Like` L JOIN Project P USING(pid) WHERE L.uid='$friend'";
     $likes = mysqli_query($conn, $get_likes);
     if (!$likes) err_close();
     while ($like = mysqli_fetch_assoc($likes)) {
@@ -51,7 +51,7 @@ while ($friend = mysqli_fetch_assoc($friends)) {
     }
 
     // get all friends' pledges
-    $get_pledges = "SELECT Pl.uid, P.pname, Pl.amount, Pl.pledgetime FROM Pledge Pl JOIN Project P USING(pid) WHERE Pl.uid='$friend'";
+    $get_pledges = "SELECT Pl.uid, P.pid, P.pname, Pl.amount, Pl.pledgetime FROM Pledge Pl JOIN Project P USING(pid) WHERE Pl.uid='$friend'";
     $pledges = mysqli_query($conn, $get_pledges);
     if (!$pledges) err_close();
     while ($pledge = mysqli_fetch_assoc($pledges)) {
@@ -71,7 +71,7 @@ while ($project = mysqli_fetch_assoc($projects)) {
     $project = $project['pid'];
 
     // get all posts from project
-    $get_posts = "SELECT P.pname, M.text, M.attachment, M.addtime FROM Project P JOIN Material M USING(pid) WHERE P.pid='$project'";
+    $get_posts = "SELECT P.pid, P.pname, M.text, M.attachment, M.type, M.addtime FROM Project P JOIN Material M USING(pid) WHERE P.pid='$project'";
     $posts = mysqli_query($conn, $get_posts);
     if (!$posts) err_close();
     while ($post = mysqli_fetch_assoc($posts)) {
@@ -138,7 +138,7 @@ krsort($activity);
                         "<li class='comment'>
                           <div class=\"row\">
                             <div class='well well-sm pull-left'>
-                              ".$e['uid']." commented on ".$e['pname'].":<br>"
+                              ".$e['uid']." commented on <a href=\"project.php?pid=${e['pid']}\">".$e['pname']."</a>:<br>"
                               .$e['text']."
                             </div>
                           </div>
@@ -148,7 +148,7 @@ krsort($activity);
                         "<li class='like'>
                           <div class=\"row\">
                             <div class='well well-sm pull-left'>
-                              ".$e['uid']." likes ".$e['pname']."
+                              ".$e['uid']." likes <a href=\"project.php?pid=${e['pid']}\">".$e['pname']."</a>
                             </div>
                           </div>
                         </li>";
@@ -157,7 +157,7 @@ krsort($activity);
                         "<li class='pledge'>
                           <div class=\"row\">
                             <div class='well well-sm pull-left'>
-                              ".$e['uid']." pledged $".$e['amount']." to ".$e['pname']."
+                              ".$e['uid']." pledged $".$e['amount']." to <a href=\"project.php?pid=${e['pid']}\">".$e['pname']."</a>
                             </div>
                           </div>
                         </li>";
@@ -166,9 +166,13 @@ krsort($activity);
                         "<li class='material'>
                           <div class=\"row\">
                             <div class='well well-sm pull-left'>
-                              ".$e['pname']." posted an update:<br>".$e['text']."<br>";
-                        echo "<img src=\"data:image/jpeg;base64,".base64_encode($e['attachment'])."\"/>               
-                            </div>
+                              <a href=\"project.php?pid=${e['pid']}\">".$e['pname']."</a> posted an update:<br>".$e['text']."<br>";
+                        if ($e['type'] == "image") {
+                            echo "<img src=uploads/${e['attachment']}>";
+                        } elseif ($type == "video") {
+                            echo "<img src=uploads/${e['attachment']}>";
+                        }
+                        echo "</div>
                           </div>
                         </li>";
                     }

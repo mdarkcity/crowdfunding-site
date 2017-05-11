@@ -5,7 +5,7 @@
       <div class="form-group">
         <input type="text" class="form-control" name="keyword" placeholder="Search projects">
       </div>
-      <button type="submit" class="btn btn-default">Search</button>
+      <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
     </form>
 
     <ul class="nav navbar-nav navbar-right">

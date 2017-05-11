@@ -53,7 +53,8 @@ DROP TABLE IF EXISTS `Material`;
 CREATE TABLE `Material` (
   `pid` INT NOT NULL,
   `text` TEXT,
-  `attachment` BLOB,
+  `attachment` VARCHAR(500),
+  `type` ENUM('image', 'video') DEFAULT NULL,
   `addtime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`pid`, `addtime`),
   FOREIGN KEY (`pid`) REFERENCES `Project` (`pid`)
