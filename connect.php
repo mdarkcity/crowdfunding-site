@@ -11,4 +11,9 @@ if(!$conn) {
   die("Database connection failed: " . mysqli_connect_error() . " (" . mysqli_connect_errno() . ")");
 }
 
+function err_close() {
+    echo mysql_errno() . ": " . mysql_error();
+    mysqli_close($conn);
+}
+
 ?>

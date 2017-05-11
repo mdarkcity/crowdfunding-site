@@ -3,7 +3,7 @@
 
     <form class="navbar-form navbar-left" action="projectlist.php" method="POST">
       <div class="form-group">
-        <input type="text" class="form-control" name="project_name" placeholder="Search projects">
+        <input type="text" class="form-control" name="keyword" placeholder="Search projects">
       </div>
       <button type="submit" class="btn btn-default">Search</button>
     </form>

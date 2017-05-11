@@ -1,62 +1,43 @@
-<?php SESSION_start(); ?>
-<!doctype html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>Project Page</title>
-    </head>
-    <body>
-		
-		<table border="1">
-		      <thead>
-		        <tr>
-				  <th>Project ID</th>
-				  <th>Owner ID</th>
-				  <th>Project Post time</th>
-		          <th>Project Name</th>
-		          <th>Project Description</th>
-				  <th>Mininum funds required</th>
-				  <th>Maximum Funds</th>
-				  <th>current Funds</th>
-				  <th>Funding End date</th>
-				  <th>Completition Date</th>
-				  <th>Status</th>
-		        </tr>
-		      </thead>
-		 <?php
-		 $error = false;
-		// 1. Create a database connection
-		require_once('connect.php');
-		$proj_id = $_POST['pid'];
-		$_SESSION['pid']=$proj_id;
-		
-		
-	 $query = "select * from project where pid = '$proj_id'";
-	$result = mysqli_query($conn,$query);
-       while ($row = mysqli_fetch_assoc($result))
-		  {
-			  
-			?>   
-		            <tr>
-		              <td><?php echo $row['pid'] ?></td>
-					  <td><?php echo $row['uid'] ?></td>
-					  <td><?php echo $row['posttime'] ?></td>
-					  <td><?php echo $row['pname'] ?></td>
-					  <td><?php echo $row['description'] ?></td>
-					  <td><?php echo $row['minfunds'] ?></td>
-					  <td><?php echo $row['maxfunds'] ?></td>
-					  <td><?php echo $row['currentfunds'] ?></td>
-					  <td><?php echo $row['enddate'] ?></td>
-					  <td><?php echo $row['completiondate'] ?></td>
-					  <td><?php echo $row['status'] ?></td>
-		            </tr> 
-				 
-				 <?php
-			  }
-		  
-		         ?>
-				 </table>
-		
+<?php
+require_once('connect.php');
+session_start();
+
+$pid = $_GET['pid'];
+$_SESSION['pid']=$pid;
+
+$get_info = "SELECT * FROM Project WHERE pid='$pid'";
+$p_info = mysqli_query($conn, $get_info);
+if (!$p_info) err_close();
+$p_info = mysqli_fetch_array($p_info);
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Page</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+  <?php include_once('navbar.php') ?>
+  <div class="container">
+    <div class="col-md-8">
+      <div class="page-header">
+        <h2><?php echo $p_info['pname'] ?></h2>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Description
+        </div>
+        <div class="panel-body">
+          <?php echo $p_info['description'] ?>
+        </div>
+      </div>
+
+
 			<form action = "project_pledge.php" method ="POST" >
 		    <input type="submit" value="pledge"><br/>
 		    </form>
@@ -93,15 +74,8 @@
             }
 			
 			?>
-			<br/>
-			<form action = "project_pledge.php" method ="POST" >
-		    <input type="submit" value="pledge"><br/>
-		    </form>
 		
 		
-<?php
-mysqli_close($conn); 
-?>
- 	
-    </body>
-    </html>
+  </div>
+</body>
+</html>

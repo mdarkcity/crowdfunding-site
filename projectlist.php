@@ -1,6 +1,13 @@
 <?php
 require_once('connect.php');
 session_start();
+
+$key = $_POST["keyword"];
+
+$get_projects = "SELECT DISTINCT pid, pname, description, status FROM Project NATURAL JOIN ProjectTag WHERE tag LIKE '%$key%' OR pname LIKE '%$key%' OR description LIKE '%$key%' ORDER BY posttime DESC";
+$projects = mysqli_query($conn, $get_projects);
+if (!$projects) err_close();
+
 ?>
 
 <!DOCTYPE html>
@@ -14,30 +21,39 @@ session_start();
 <body>
   <?php include_once('navbar.php') ?>
   <div class="container">
-  
-    <form action="project.php" method ="POST">
-      <table border="1">
-        <thead>
-          <th>Project ID</th>
-          <th>Project Name</th>
-          <th>Project Description</th>
-        </thead>
-        <?php
-            $tag = $_POST["project_name"];
-            $get_projects = "SELECT pid,pname,description FROM Project NATURAL JOIN ProjectTag WHERE tag LIKE '%$tag%'";
-            $result = mysqli_query($conn, $get_projects);
-            while ($row = mysqli_fetch_assoc($result)) {
-        ?>
-        <tr>
-          <td><input type="checkbox" name="pid" value = "<?php echo $row['pid'] ?>"> <?php echo $row['pid'] ?></input></td>
-          <td><?php echo $row['pname'] ?></td>
-          <td><?php echo $row['description'] ?></td> 
-        </tr>
-        <?php } ?>
-      </table>
-      <br><br>
-      <input type="submit" value="submit" style = " margin-left: 50%" >
-    </form>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Search results for "<?php echo $key ?>" – newest first
+      </div>
+      <?php if (mysqli_num_rows($projects) > 0) { ?>
+        <table class="table table-striped table-bordered">
+          <thead>
+            <th>Project Name</th>
+            <th>Description</th>
+            <th>Status</th>
+          </thead>
+          <?php
+              while ($row = mysqli_fetch_assoc($projects)) {
+                  $pid = $row['pid'];
+          ?>
+          <tr>
+            <td>
+              <a href="project.php?pid=<?php echo $pid?>">
+                <?php echo $row['pname'] ?>
+              </a>
+            </td>
+            <td><?php echo $row['description'] ?></td>
+            <td><?php echo $row['status'] ?></td>
+          </tr>
+          <?php } ?>
+        </table>
+      <?php } else { ?>
+        <div class="panel-body">
+          No projects found.
+        </div>
+      <?php } ?>
+    </div>
 
   </div>
 </body>

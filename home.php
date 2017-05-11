@@ -85,11 +85,6 @@ while ($project = mysqli_fetch_assoc($projects)) {
 
 // sort events in reverse chronological order
 krsort($activity);
-
-function err_close() {
-    echo mysql_errno() . ": " . mysql_error();
-    mysqli_close($conn);
-}
 ?>
 
 <style>
