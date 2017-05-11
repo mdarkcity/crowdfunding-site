@@ -15,13 +15,13 @@ if (isset($_POST['login'])) {
 	
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
+        $_SESSION['userid'] = $userid;
         header('Location: home.php');
     } else {
         $loginerror = "Username or password is incorrect.";
         mysqli_close($conn);
     }
 
-    $_SESSION['userid'] = $userid;
 }
 ?>
 

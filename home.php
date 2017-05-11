@@ -169,7 +169,7 @@ krsort($activity);
                               <a href=\"project.php?pid=${e['pid']}\">".$e['pname']."</a> posted an update:<br>".$e['text']."<br>";
                         if ($e['type'] == "image") {
                             echo "<img src=uploads/${e['attachment']}>";
-                        } elseif ($type == "video") {
+                        } elseif ($e['type'] == "video") {
                             echo "<video controls>
                                     <source src=uploads/${e['attachment']}>
                                   </video>";
