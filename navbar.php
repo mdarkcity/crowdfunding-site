@@ -11,9 +11,9 @@
     <ul class="nav navbar-nav navbar-right">
       <li><a class="navbar-brand" href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <?php echo $_SESSION['userid']; ?> <span class="caret"></span></a>
+        <a href="" class="dropdown-toggle" data-toggle="dropdown">Hi, <?php echo $_SESSION['userid']; ?> <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Something</a></li>
+          <li><a href="">Something</a></li>
           <li class="divider"></li>
           <li><a href="logout.php">Log out</a></li>
         </ul>

@@ -185,7 +185,7 @@ function err_close() {
     </div>
     <div class="col-md-3 col-md-offset-1" style="padding-top:40px;">
       <div class="row">
-        <a href="projectcreate.php" class="btn btn-primary btn-lg btn-block" type="button"><span class="glyphicon glyphicon-flag"></span>&ensp;Create a project!</a>
+        <a href="projectcreate.php" class="btn btn-primary btn-lg btn-block" type="button"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;Create a project!</a>
       </div>
     </div>
   </div> <!-- container -->

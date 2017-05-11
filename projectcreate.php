@@ -19,9 +19,12 @@ if (isset($_POST['create'])) {
     $minfunds = floatval($minfunds);
     $maxfunds = floatval($maxfunds);
 
-    if (strlen($pname) < 2 | strlen($pname) > 40) {
+    if (strlen($pname) < 2) {
         $error = true;
-        $pname_error = "Project name must be between 2 and 40 characters.";
+        $pname_error = "Project name must be at least 2 characters.";
+    } elseif (strlen($pname) > 100) {
+        $error = true;
+        $pname_error = "Project name is too long.";
     }
     if (preg_match("/[^a-z0-9_\-!?#$%&]/i", $pname, $invalid)) {
         $pname_error2 = "Project name may not contain: $invalid[0]";
@@ -75,10 +78,10 @@ if (isset($_POST['create'])) {
 
         <div class="form-group">
           <label for="pname">Project name</label>
-          <input type="text" name="pname" class="form-control" placeholder="Name" value="<?php if ($error) echo $pname; ?>" required>
+          <input type="text" name="pname" class="form-control" placeholder="Project name" value="<?php if ($error) echo $pname; ?>" required>
           <p class="text-danger text-right"><?php if (isset($pname_error)) echo $pname_error; ?></p>
         </div>
-	   
+
         <div class="form-group">
           <label for="minfunds">Minimum funds for a successful campaign</label>
           <input type="text" name="minfunds" class="form-control" placeholder="Mininum funds" value="<?php if ($error) echo number_format($minfunds, 2); ?>" required>
@@ -88,14 +91,14 @@ if (isset($_POST['create'])) {
           <label for="maxfunds">Maximum funds to be raised</label>
           <input type="text" name="maxfunds" class="form-control" placeholder="Maximum funds" value="<?php if ($error) echo number_format($maxfunds, 2); ?>" required>
         </div>
-	   
+
         <p class="text-danger text-right"><?php if (isset($funds_error)) echo $funds_error; ?></p>
 
         <div class="form-group">
           <label for="enddate">End date for the fundraising campaign</label>
           <input type="text" name="enddate" class="form-control" placeholder="End date" value="<?php if ($error) echo $enddate; ?>" required>
         </div>
-	   
+
         <div class="form-group">
           <label for="completiondate">Estimated project completion date</label>
           <input type="text" name="completiondate" class="form-control" placeholder="Completion date" value="<?php if ($error) echo $completiondate; ?>" required>
@@ -103,7 +106,7 @@ if (isset($_POST['create'])) {
        
         <button class="btn btn-primary btn-block" style="margin-top:30px;" type="submit" name="create">Create Project</button>
       </form>
-	  
+
     </div> <!-- middle column -->
   </div> <!-- container -->
 </body>
